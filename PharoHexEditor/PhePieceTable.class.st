@@ -262,13 +262,15 @@ PhePieceTable >> pieceTable [
 { #category : #accessing }
 PhePieceTable >> printString [
 
-	^ 'a PhePieceTable( ' , (String streamContents: [ :stream |
+	^ (String streamContents: [ :stream |
+		   stream << 'a PhePieceTable( ' asString.
 		   pieceTable do: [ :piece |
 			   piece position to: piece position + piece length - 1 do: [ :i |
 				   stream << ((piece isFromAddBuffer
 					     ifTrue: [ addBuffer ]
 					     ifFalse: [ originalBuffer ]) at: i) printString.
-				   stream << Character space ] ] ]) , ')'
+				   stream << Character space ] ].
+		   stream << ')' asString ])
 ]
 
 { #category : #accessing }
