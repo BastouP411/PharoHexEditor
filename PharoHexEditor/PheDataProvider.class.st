@@ -15,11 +15,11 @@ PheDataProvider >> dataSize [
 
 { #category : #'as yet unclassified' }
 PheDataProvider >> loadBytes [
-	^self loadBytes: (self dataSize) fromOffset: 0
+	^self loadBytesOfSize: (self dataSize) fromOffset: 0
 ]
 
 { #category : #'as yet unclassified' }
-PheDataProvider >> loadBytes: aQuantity fromOffset: anInteger [
+PheDataProvider >> loadBytesOfSize: aQuantity fromOffset: anInteger [
 	^self subclassResponsibility 
 ]
 

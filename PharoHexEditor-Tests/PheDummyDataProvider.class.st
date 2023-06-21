@@ -1,5 +1,5 @@
 Class {
-	#name : #DummyDataProvider,
+	#name : #PheDummyDataProvider,
 	#superclass : #PheDataProvider,
 	#classVars : [
 		'testData'
@@ -8,41 +8,50 @@ Class {
 }
 
 { #category : #'instance creation' }
-DummyDataProvider class >> newWithTestData: aByteArray [
+PheDummyDataProvider class >> newWithTestData: aByteArray [
 
 	| provider |
-	provider := DummyDataProvider new.
+	provider := PheDummyDataProvider new.
 	provider testData: aByteArray.
 	^ provider
 ]
 
 { #category : #'as yet unclassified' }
-DummyDataProvider >> dataSize [
+PheDummyDataProvider >> dataSize [
 
 	^ testData size
 ]
 
 { #category : #'as yet unclassified' }
-DummyDataProvider >> loadBytes: aQuantity fromOffset: anInteger [
+PheDummyDataProvider >> loadBytesOfSize: aQuantity fromOffset: anInteger [
 
 	^ testData copyFrom: anInteger + 1 to: aQuantity + anInteger
 ]
 
 { #category : #'as yet unclassified' }
-DummyDataProvider >> saveBytes: aByteArray atOffset: anInteger [
+PheDummyDataProvider >> randomize [
+
+	| random |
+	random := Random new.
+	1 to: testData size do: [ :i |
+	testData at: i put: (random nextIntegerBetween: 0 and: 255) ]
+]
+
+{ #category : #'as yet unclassified' }
+PheDummyDataProvider >> saveBytes: aByteArray atOffset: anInteger [
 
 	1 to: aByteArray size do: [ :index |
 	testData at: anInteger + index put: (aByteArray at: index) ]
 ]
 
 { #category : #'as yet unclassified' }
-DummyDataProvider >> testData [
+PheDummyDataProvider >> testData [
 
 	^ testData
 ]
 
 { #category : #'as yet unclassified' }
-DummyDataProvider >> testData: aByteArray [
+PheDummyDataProvider >> testData: aByteArray [
 
 	testData := aByteArray 
 ]

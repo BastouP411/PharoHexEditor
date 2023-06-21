@@ -31,13 +31,39 @@ PheHexEditor >> dataProvider: anObject [
 ]
 
 { #category : #accessing }
-PheHexEditor >> lastExtractedData [
+PheHexEditor >> exportData [
 
-	^ lastExtractedData
+	dataProvider saveBytes: lastExtractedData
+]
+
+{ #category : #accessing }
+PheHexEditor >> exportDataAt: anOffset ofSize: anInteger [
+
+	dataProvider
+		saveBytes:
+		(lastExtractedData copyFrom: anOffset + 1 to: anOffset + anInteger)
+		atOffset: anOffset
 ]
 
 { #category : #accessing }
 PheHexEditor >> lastExtractedData: anObject [
 
 	lastExtractedData := anObject
+]
+
+{ #category : #accessing }
+PheHexEditor >> reloadData [
+
+	lastExtractedData := dataProvider load
+]
+
+{ #category : #accessing }
+PheHexEditor >> reloadDataAt: anOffset ofSize: anInteger [
+
+	| reloadedBytes |
+	reloadedBytes := dataProvider
+		                 loadBytesOfSize: anInteger
+		                 fromOffset: anOffset.
+	1 to: anInteger do: [ :i |
+	lastExtractedData at: anOffset + i put: (reloadedBytes at: i) ]
 ]
