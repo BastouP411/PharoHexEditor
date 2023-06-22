@@ -1,34 +1,30 @@
 Class {
 	#name : #PheDataProvider,
 	#superclass : #Object,
-	#instVars : [
-		'lastExtractedData',
-		'dataProvider'
-	],
-	#category : #PharoHexEditor
+	#category : #'PharoHexEditor-Core'
 }
 
-{ #category : #'as yet unclassified' }
-PheDataProvider >> dataSize [
-	^self subclassResponsibility 
+{ #category : #'class initialization' }
+PheDataProvider class >> initialize [ 
+	
 ]
 
-{ #category : #'as yet unclassified' }
-PheDataProvider >> loadBytes [
-	^self loadBytesOfSize: (self dataSize) fromOffset: 0
+{ #category : #testing }
+PheDataProvider >> hasChanged [ 
+	^false
 ]
 
-{ #category : #'as yet unclassified' }
-PheDataProvider >> loadBytesOfSize: aQuantity fromOffset: anInteger [
-	^self subclassResponsibility 
+{ #category : #testing }
+PheDataProvider >> isWritable [ 
+	^true
 ]
 
-{ #category : #'as yet unclassified' }
-PheDataProvider >> saveBytes: aByteArray [
-	self saveBytes: aByteArray atOffset: 0
+{ #category : #testing }
+PheDataProvider >> loadContents: aBlock [
+	self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
-PheDataProvider >> saveBytes: aByteArray atOffset: anInteger [
+{ #category : #testing }
+PheDataProvider >> saveContents: aBlock [
 	self subclassResponsibility 
 ]

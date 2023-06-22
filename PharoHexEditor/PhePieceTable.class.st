@@ -24,6 +24,19 @@ PhePieceTable class >> newFromArray: aByteArray [
 	^ table
 ]
 
+{ #category : #'instance creation' }
+PhePieceTable class >> newFromStream: aStream [
+
+	| table size |
+	size := aStream size.
+	table := self new
+		         originalBuffer: aStream contents;
+		         yourself.
+	table pieceTable add:
+		(PhePiece newFromOriginalBufferFrom: 1 ofLength: size).
+	^ table
+]
+
 { #category : #accessing }
 PhePieceTable >> addBuffer [
 
@@ -204,6 +217,29 @@ PhePieceTable >> cursor [
 	^ cursor
 ]
 
+{ #category : #enumerating }
+PhePieceTable >> do: aBlock [
+
+	pieceTable do: [ :piece |
+		piece position to: piece position + piece length - 1 do: [ :k |
+			aBlock value: ((piece isFromOriginalBuffer
+					  ifTrue: [ originalBuffer ]
+					  ifFalse: [ addBuffer ]) at: k) ] ]
+]
+
+{ #category : #enumerating }
+PhePieceTable >> do: elementBlock separatedBy: separatorBlock [
+
+	| beforeFirst |
+	beforeFirst := true.
+	self do:
+		[:each |
+		beforeFirst
+			ifTrue: [beforeFirst := false]
+			ifFalse: [separatorBlock value].
+		elementBlock value: each]
+]
+
 { #category : #initialization }
 PhePieceTable >> initialize [
 	originalBuffer := ByteArray new.
@@ -260,18 +296,14 @@ PhePieceTable >> pieceTable [
 	^ pieceTable
 ]
 
-{ #category : #accessing }
-PhePieceTable >> printString [
+{ #category : #enumerating }
+PhePieceTable >> printOn: aStream [
 
-	^ (String streamContents: [ :stream |
-		   stream << 'a PhePieceTable( ' asString.
-		   pieceTable do: [ :piece |
-			   piece position to: piece position + piece length - 1 do: [ :i |
-				   stream << ((piece isFromAddBuffer
-					     ifTrue: [ addBuffer ]
-					     ifFalse: [ originalBuffer ]) at: i) printString.
-				   stream << Character space ] ].
-		   stream << ')' asString ])
+	aStream nextPutAll: 'a PhePieceTable['.
+	self
+		do: [ :each | each printOn: aStream ]
+		separatedBy: [ aStream nextPut: $ ].
+	aStream nextPut: $]
 ]
 
 { #category : #accessing }
@@ -336,8 +368,10 @@ PhePieceTable >> undo [
 PhePieceTable >> writeOnStream: stream [
 
 	pieceTable do: [ :piece |
-		piece position to: piece position + piece length - 1 do: [ :i |
-			stream << ((piece isFromAddBuffer
-				  ifTrue: [ addBuffer ]
-				  ifFalse: [ originalBuffer ]) at: i) ] ]
+		stream
+			next: piece length
+			putAll: (piece isFromOriginalBuffer
+					 ifTrue: [ originalBuffer ]
+					 ifFalse: [ addBuffer ])
+			startingAt: piece position ]
 ]
