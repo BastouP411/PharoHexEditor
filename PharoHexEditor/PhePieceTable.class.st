@@ -109,14 +109,15 @@ PhePieceTable >> at: index delete: length [
 		"Maintenant conditions sur l'intersection"
 		intersectStart > intersectEnd
 			ifTrue: [
-				timeTravelChain linkBefore: piece.
+				timeTravelChain chain ifNil: [timeTravelChain linkBefore: piece].
 				piece ]
 			ifFalse: [
-				timeTravelChain chain ifNotNil: [ timeTravelChain chain: piece ].
+				timeTravelChain chain ifNil: [ timeTravelChain chain: piece ].
 				self
 					createIntersectPieceLink: piece
 					from: 1 + intersectStart - pieceStartIndex
-					to: 1 + intersectEnd - pieceStartIndex ] ]
+					to: 1 + intersectEnd - pieceStartIndex ] ].
+			undoStack push: timeTravelChain 
 ]
 
 { #category : #accessing }
@@ -164,7 +165,7 @@ PhePieceTable >> at: index insert: aCollectionOrElement [
 					at: index - (cumulated - piece value length)
 					ofLength: elementSize ]
 			ifFalse: [
-				timeTravelChain linkBefore: piece.
+				inserted ifFalse: [timeTravelChain linkBefore: piece].
 				piece ] ].
 		undoStack push: timeTravelChain.
 ]
