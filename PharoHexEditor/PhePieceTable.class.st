@@ -134,6 +134,33 @@ PhePieceTable >> at: index delete: length [
 ]
 
 { #category : #accessing }
+PhePieceTable >> at: index extract: length [
+
+	| cumulated extract copied nextIndex |
+	cumulated := 0.
+	copied := 0.
+	nextIndex := index.
+	extract := originalBuffer class new: length.
+	pieceTable do: [ :piece |
+		cumulated + piece length >= index ifTrue: [
+			| numToCopy |
+			numToCopy := {
+				             (length - copied).
+				             (piece length - (nextIndex - cumulated) + 1) } min.
+
+			nextIndex - cumulated to: nextIndex - cumulated + numToCopy - 1 do: [
+				:i |
+				extract
+					at: (copied := copied + 1)
+					put: ((piece isFromOriginalBuffer
+							  ifTrue: [ originalBuffer ]
+							  ifFalse: [ addBuffer ]) at: (i + piece position - 1) ) ].
+			nextIndex := cumulated + piece length + 1.
+			copied = length ifTrue: [ ^ extract ] ].
+		cumulated := cumulated + piece length ]
+]
+
+{ #category : #accessing }
 PhePieceTable >> at: index insert: aCollectionOrElement [
 
 	| elementSize positionInAddBuffer cumulated inserted timeTravelChain |

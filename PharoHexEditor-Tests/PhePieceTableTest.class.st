@@ -21,6 +21,51 @@ PhePieceTableTest >> testBaseArray [
 ]
 
 { #category : #running }
+PhePieceTableTest >> testExtract1 [
+	
+	pieceTable at: 5 insert: #[ 11 12 13 ].
+	
+	self assert: pieceTable asArray equals: #(1 2 3 4 11 12 13 5 6 7 8 9 10).
+	self assert: (pieceTable at: 1 extract: 4) asArray equals: #(1 2 3 4)
+]
+
+{ #category : #running }
+PhePieceTableTest >> testExtract2 [
+	
+	pieceTable at: 5 insert: #[ 11 12 13 ].
+	
+	self assert: pieceTable asArray equals: #(1 2 3 4 11 12 13 5 6 7 8 9 10).
+	self assert: (pieceTable at: 8 extract: 6) asArray equals: #(5 6 7 8 9 10)
+]
+
+{ #category : #running }
+PhePieceTableTest >> testExtract3 [
+	
+	pieceTable at: 5 insert: #[ 11 12 13 ].
+	
+	self assert: pieceTable asArray equals: #(1 2 3 4 11 12 13 5 6 7 8 9 10).
+	self assert: (pieceTable at: 3 extract: 4) asArray equals: #(3 4 11 12)
+]
+
+{ #category : #running }
+PhePieceTableTest >> testExtract4 [
+	
+	pieceTable at: 5 insert: #[ 11 12 13 ].
+	
+	self assert: pieceTable asArray equals: #(1 2 3 4 11 12 13 5 6 7 8 9 10).
+	self assert: (pieceTable at: 6 extract: 4) asArray equals: #(12 13 5 6)
+]
+
+{ #category : #running }
+PhePieceTableTest >> testExtract5 [
+	
+	pieceTable at: 5 insert: #[ 11 12 13 ].
+	
+	self assert: pieceTable asArray equals: #(1 2 3 4 11 12 13 5 6 7 8 9 10).
+	self assert: (pieceTable at: 3 extract: 7) asArray equals: #(3 4 11 12 13 5 6)
+]
+
+{ #category : #running }
 PhePieceTableTest >> testInsertEnd [
 	
 	pieceTable at: 11 insert: #[11 12 13].
